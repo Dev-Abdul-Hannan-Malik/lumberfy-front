@@ -1,13 +1,11 @@
 import { faHospital } from "@fortawesome/free-regular-svg-icons";
 import {
-  faAdd,
   faBars,
   faChevronRight,
   faEdit,
   faEnvelope,
   faEye,
   faHeartbeat,
-  faHospitalWide,
   faMapMarkerAlt,
   faNotesMedical,
   faPhone,
@@ -15,12 +13,24 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
-import { useHistory } from "react-router";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./styles.css";
 
 export default function Index() {
+  const [patients, setPatients] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:9000/patient").then((response) => {
+      const temp = response.data.patients;
+      setPatients(temp);
+      setTimeout(() => {
+        console.log(patients);
+      }, 100);
+    });
+  }, []);
+
   return (
     <div className="body">
       <header className="header">
@@ -46,6 +56,15 @@ export default function Index() {
           <button onClick={() => window.location.replace("/#patients")}>
             patients
           </button>
+          <button onClick={() => window.location.replace("/#appointments")}>
+            appointments
+          </button>
+          <button onClick={() => window.location.replace("/#reports")}>
+            reports
+          </button>
+          <button onClick={() => window.location.replace("/#prescriptions")}>
+            prescriptions
+          </button>
         </nav>
 
         <div id="menu-btn">
@@ -68,7 +87,7 @@ export default function Index() {
             perferendis sit quis. Nisi, quos fugiat.
           </p>
         </div>
-        <Link to="/AppointmentForm" className="btn">
+        <Link to="/LoginForm" className="btn">
           contact us! <FontAwesomeIcon icon={faChevronRight} />
         </Link>
       </section>
@@ -200,67 +219,21 @@ export default function Index() {
             <h3>john deo</h3>
             <span>expert doctor</span>
             <div className="share">
-              <i>
-                <Link to="#">
+              <span>
+                <Link to="#" className="fa-link">
                   <FontAwesomeIcon icon={faEye} />
                 </Link>
-              </i>
-              <i>
-                <Link to="#">
+              </span>
+              <span>
+                <Link to="#" className="fa-link">
                   <FontAwesomeIcon icon={faEdit} />
                 </Link>
-              </i>
-              <i>
-                <Link to="#">
+              </span>
+              <span>
+                <Link to="#" className="fa-link">
                   <FontAwesomeIcon icon={faTrash} />
                 </Link>
-              </i>
-            </div>
-          </div>
-
-          <div className="box">
-            <img src="images/doc-2.jpg" alt="" />
-            <h3>john deo</h3>
-            <span>expert doctor</span>
-            <div className="share">
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </i>
-            </div>
-          </div>
-
-          <div className="box">
-            <img src="images/doc-3.jpg" alt="" />
-            <h3>john deo</h3>
-            <span>expert doctor</span>
-            <div className="share">
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </i>
+              </span>
             </div>
           </div>
         </div>
@@ -282,83 +255,51 @@ export default function Index() {
         </div>
 
         <div className="box-container">
-          <div className="box">
-            <img src="images/doc-4.jpg" alt="" />
-            <h3>john deo</h3>
-            <span>patient</span>
-            <div className="share">
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </i>
-            </div>
-          </div>
-
-          <div className="box">
-            <img src="images/doc-5.jpg" alt="" />
-            <h3>john deo</h3>
-            <span>patient</span>
-            <div className="share">
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </i>
-            </div>
-          </div>
-
-          <div className="box">
-            <img src="images/doc-6.jpg" alt="" />
-            <h3>john deo</h3>
-            <span>patient</span>
-            <div className="share">
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </i>
-              <i>
-                <Link to="#">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </i>
-            </div>
-          </div>
+          {patients.map((value, index) => {
+            return (
+              <div className="box" key={index}>
+                <img src={value.img} alt="" />
+                <h3>{value.name}</h3>
+                <span>{value.nic}</span>
+                <div className="share">
+                  <span>
+                    <Link to={`/ViewPatient/${value._id}`} className="fa-link">
+                      <FontAwesomeIcon icon={faEye} />
+                    </Link>
+                  </span>
+                  <span>
+                    <Link to={`/EditPatient/${value._id}`} className="fa-link">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Link>
+                  </span>
+                  <span>
+                    <button
+                      onClick={() => {
+                        deletePatient(value._id);
+                      }}
+                      className="fa-link"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
       {/* <!-- patient section ends -->
 
-<!-- appointment section starts --> */}
-      <section className="records" id="patients">
+      <!-- appointment section starts --> */}
+
+      <section className="records" id="appointments">
         <div className="section-head">
-          <Link to="/PatientForm" className="fa fa-eye">
+          <Link
+            to="/AppointmentForm"
+            state={{ category: "" }}
+            className="fa fa-eye"
+          >
             <FontAwesomeIcon icon={faEye} />
             add+
           </Link>
@@ -369,31 +310,133 @@ export default function Index() {
         </div>
 
         <div className="box-container">
-          <div className="box">
-            <h3>john deo</h3>
-            <span>patient</span>
+          <div className="box text-block">
+            <h3>APPOINTMENT 1</h3>
+            <p>
+              <Link to="/doctor/:id" className="link">
+                doctor
+              </Link>
+              <Link to="/patient/:id" className="link">
+                Patient
+              </Link>
+            </p>
             <div className="share">
-              <i>
-                <Link to="#">
+              <span>
+                <Link to="#" className="fa-link">
                   <FontAwesomeIcon icon={faEye} />
                 </Link>
-              </i>
-              <i>
-                <Link to="#">
+              </span>
+              <span>
+                <Link to="#" className="fa-link">
                   <FontAwesomeIcon icon={faEdit} />
                 </Link>
-              </i>
-              <i>
-                <Link to="#">
+              </span>
+              <span>
+                <Link to="#" className="fa-link">
                   <FontAwesomeIcon icon={faTrash} />
                 </Link>
-              </i>
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* <!-- patient section ends -->
+      {/* <!-- appointment section ends -->
+
+      <!-- report section starts --> */}
+
+      <section className="records" id="reports">
+        <div className="section-head">
+          <Link to="/ReportForm" className="fa fa-eye">
+            <FontAwesomeIcon icon={faEye} />
+            add+
+          </Link>
+          <h1 className="heading">
+            some patient <span>reports</span>
+          </h1>
+          <input type="text" placeholder="Search.." />
+        </div>
+
+        <div className="box-container">
+          <div className="box text-block">
+            <h3>REPORT</h3>
+            <p>
+              <Link to="/patient/:id" className="link">
+                patient
+              </Link>
+              <Link to="/mri/:id" className="link">
+                MRI
+              </Link>
+            </p>
+            <div className="share">
+              <span>
+                <Link to="#" className="fa-link">
+                  <FontAwesomeIcon icon={faEye} />
+                </Link>
+              </span>
+              <span>
+                <Link to="#" className="fa-link">
+                  <FontAwesomeIcon icon={faEdit} />
+                </Link>
+              </span>
+              <span>
+                <Link to="#" className="fa-link">
+                  <FontAwesomeIcon icon={faTrash} />
+                </Link>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* <!-- report section ends -->
+
+      <!-- prescription section starts --> */}
+
+      <section className="records" id="prescriptions">
+        <div className="section-head">
+          <Link to="/PrescriptionForm" className="fa fa-eye">
+            <FontAwesomeIcon icon={faEye} />
+            add+
+          </Link>
+          <h1 className="heading">
+            some <span>prescriptions</span>
+          </h1>
+          <input type="text" placeholder="Search.." />
+        </div>
+        <div className="box-container">
+          <div className="box text-block">
+            <p>
+              <h3>PRESCRIPTION</h3>
+              <Link to="#" className="link">
+                patient
+              </Link>
+              <Link to="#" className="link">
+                Doctor
+              </Link>
+            </p>
+            <div className="share">
+              <span>
+                <Link to="#" className="fa-link">
+                  <FontAwesomeIcon icon={faEye} />
+                </Link>
+              </span>
+              <span>
+                <Link to="#" className="fa-link">
+                  <FontAwesomeIcon icon={faEdit} />
+                </Link>
+              </span>
+              <span>
+                <Link to="#" className="fa-link">
+                  <FontAwesomeIcon icon={faTrash} />
+                </Link>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* <!-- prescription section ends -->
 
 <!-- footer sections starts --> */}
 
@@ -457,4 +500,13 @@ export default function Index() {
       </section>
     </div>
   );
+  async function deletePatient(id) {
+    const response = await axios.delete(
+      "http://localhost:9000/patient/delete",
+      {
+        patientId: id,
+      }
+    );
+    console.log(response);
+  }
 }

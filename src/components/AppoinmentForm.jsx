@@ -6,8 +6,17 @@ import "./styles.css";
 
 export default function AppointmentForm() {
   const location = useLocation();
+  const disablePastDate = () => {
+    const today = new Date();
+    const dd = String(today.getDate() + 1).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const yyyy = today.getFullYear();
+    return yyyy + "-" + mm + "-" + dd;
+  };
+
   console.log("location.state.category: ", location.state.category);
   const [category, setCategory] = useState(location.state.category);
+  const [time, setTime] = useState("");
   console.log("cate: ", category);
 
   const categories = [
@@ -15,6 +24,18 @@ export default function AppointmentForm() {
     "Medication",
     "Physio Therapy",
     "Total Care",
+  ];
+
+  const times = [
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
   ];
 
   return (
@@ -42,20 +63,20 @@ export default function AppointmentForm() {
             <img src="images/book-img.svg" alt="" />
           </div>
           <label for=""></label>
-          <form action="" onSubmit={(e) => e.preventDefault()}>
+          <form action="" onSubmit={handleSubmit}>
             <div className="field">
               <label for="patient">patient</label>
               <select name="patient" id="patient">
-                <option value="volvo">Ahmar</option>
-                <option value="saab">Akbar</option>
-                <option value="opel">Anthony</option>
+                <option>Ahmar</option>
+                <option>Akbar</option>
+                <option>Anthony</option>
               </select>
               <label for="doctor">doctor</label>
               <select name="doctor" id="doctor">
-                <option value="volvo">Ember</option>
-                <option value="saab">Earth</option>
-                <option value="opel">Storm</option>
-                <option value="audi">Void</option>
+                <option>Ember</option>
+                <option>Earth</option>
+                <option>Storm</option>
+                <option>Void</option>
               </select>
             </div>
             <div className="field">
@@ -75,11 +96,33 @@ export default function AppointmentForm() {
                 })}
               </select>
             </div>
-            <input type="date" className="box" />
-            <input type="submit" value="submit" className="btn" />
+            <div className="field">
+              <input type="date" className="box" min={disablePastDate()} />
+            </div>
+            <div className="field">
+              <select
+                name="time"
+                id="time"
+                value={time}
+                onChange={(p) => setTime(p.target.value)}
+              >
+                {times.map((item, i) => {
+                  return (
+                    <option key={i} value={item}>
+                      {item}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <button type="submit" value="submit" className="btn">submit</button>
           </form>
         </div>
       </section>
     </div>
   );
+  function handleSubmit(event) {
+    event.preventDefault();
+    console.log("MUFFIN BEST UwU");
+  }
 }
