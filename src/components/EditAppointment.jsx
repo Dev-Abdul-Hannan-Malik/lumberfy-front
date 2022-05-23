@@ -2,12 +2,12 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import "./styles.css";
 
 export default function AppointmentForm() {
   const location = useLocation();
-  const [category, setCategory] = useState(location.state.category);
+  const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [dateTime, setDateTime] = useState("");
@@ -16,6 +16,8 @@ export default function AppointmentForm() {
 
   const [patients, setPatients] = useState([]);
   const [doctors, setDoctors] = useState([]);
+
+  const params = useParams();
 
   useEffect(() => {
     axios.get("http://localhost:9000/doctor").then((response) => {
@@ -28,6 +30,15 @@ export default function AppointmentForm() {
       setPatients(temp);
       setTimeout(() => {}, 100);
     });
+    axios
+      .get(`http://localhost:9000/appointment/${params.id}`)
+      .then((response) => {
+        const temp = response.data;
+        setCategory(temp.appointment.category);
+        setDateTime(temp.appointment.dateTime);
+        setPatientId(temp.appointment.patientId);
+        setDoctorId(temp.appointment.doctorId);
+      });
   }, []);
 
   const disablePastDate = () => {
@@ -70,7 +81,7 @@ export default function AppointmentForm() {
             back
           </Link>
           <h1 className="heading">
-            <span>add</span> appointment
+            <span>edit</span> appointment
           </h1>
         </div>
         <div
@@ -160,7 +171,8 @@ export default function AppointmentForm() {
     setDateTime(new Date(date + " " + time));
     event.preventDefault();
     axios
-      .post("http://localhost:9000/appointment/add", {
+      .put("http://localhost:9000/appointment/edit", {
+        appointmentId: params.id,
         category,
         dateTime,
         patientId,

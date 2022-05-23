@@ -5,7 +5,7 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import "./styles.css";
 
-export default function PatientForm() {
+export default function DoctorForm() {
   const [name, setName] = useState("");
   const [nic, setNic] = useState("");
   const [email, setEmail] = useState("");
@@ -16,12 +16,12 @@ export default function PatientForm() {
   const params = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/patient/${params.id}`).then((response) => {
+    axios.get(`http://localhost:9000/doctor/${params.id}`).then((response) => {
       const temp = response.data;
-      setName(temp.patient.name);
-      setNic(temp.patient.nic);
-      setEmail(temp.patient.email);
-      setPassword(temp.patient.password);
+      setName(temp.doctor.name);
+      setNic(temp.doctor.nic);
+      setEmail(temp.doctor.email);
+      setPassword(temp.doctor.password);
       setTimeout(() => {
         console.log(temp);
       }, 100);
@@ -41,7 +41,7 @@ export default function PatientForm() {
             back
           </Link>
           <h1 className="heading">
-            <span>edit</span> patient
+            <span>edit</span> doctor
           </h1>
         </div>
         <div className="row">
@@ -123,8 +123,8 @@ export default function PatientForm() {
   }
   async function handleSubmit(event) {
     event.preventDefault();
-    const response = await axios.put("http://localhost:9000/patient/edit", {
-      patientId: params.id,
+    const response = await axios.put("http://localhost:9000/doctor/edit", {
+      doctorId: params.id,
       name,
       email,
       nic,

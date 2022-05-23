@@ -9,18 +9,13 @@ export default function PatientForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  var auth_email = "admin";
+  var auth_password = "123";
+
   return (
     <div className="body">
       <section className="book" id="book">
         <div className="section-head" style={{ justifyContent: "center" }}>
-          <Link
-            to="/"
-            className="fa fa-arrow-left"
-            style={{ marginRight: "10rem" }}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} />
-            back
-          </Link>
           <h1 className="heading">
             <span>admin</span> login
           </h1>
@@ -50,9 +45,16 @@ export default function PatientForm() {
               required
               minLength="6"
             />
-            <button type="submit" value="submit" className="btn">
-              submit
-            </button>
+            <Link to={`/Index`}>
+              <button
+                type="submit"
+                value="submit"
+                className="btn"
+                onClick={() => {}}
+              >
+                submit
+              </button>
+            </Link>
           </form>
         </div>
       </section>

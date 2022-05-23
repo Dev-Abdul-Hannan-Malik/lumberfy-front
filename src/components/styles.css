@@ -119,6 +119,11 @@ section:nth-child(even) {
   background: #fff;
 }
 
+.header input {
+  border: var(--border);
+  margin-left: 1rem;
+}
+
 .header .logo {
   font-size: 2.5rem;
   color: var(--black);
@@ -363,7 +368,7 @@ select {
   width: 5rem;
   line-height: 4.5rem;
   font-size: 2rem;
-  color: var(--green);
+  color: var(--black);
   margin: 0.5rem;
 }
 

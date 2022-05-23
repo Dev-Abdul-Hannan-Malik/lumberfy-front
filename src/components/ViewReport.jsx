@@ -5,26 +5,31 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import "./styles.css";
 
-export default function PatientForm() {
-  const [name, setName] = useState("");
-  const [nic, setNic] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState("");
+export default function ReportForm() {
+  const [description, setDescription] = useState("");
+  const [mriId, setMriId] = useState("");
+  const [patientId, setPatientId] = useState("");
+
+  const [patient, setPatient] = useState("");
+  const [mri, setMri] = useState("");
 
   const params = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/patient/${params.id}`).then((response) => {
+    axios.get(`http://localhost:9000/report/${params.id}`).then((response) => {
       const temp = response.data;
-      setName(temp.patient.name);
-      setNic(temp.patient.nic);
-      setEmail(temp.patient.email);
-      setPassword(temp.patient.password);
+      setDescription(temp.report.description);
+      setMriId(temp.report.mriId);
+      setPatientId(temp.report.patientId);
       setTimeout(() => {
         console.log(temp);
       }, 100);
+    });
+    axios.get(`http://localhost:9000/patient/${patientId}`).then((response) => {
+      setPatient(response["data"]["patients"][0]["name"]);
+    });
+    axios.get(`http://localhost:9000/mri/${mriId}`).then((response) => {
+      setMri(response["data"]["mris"][0]["image"]);
     });
   }, []);
 
@@ -41,27 +46,23 @@ export default function PatientForm() {
             back
           </Link>
           <h1 className="heading">
-            <span>patient</span>
+            <span>report</span>
           </h1>
         </div>
         <div className="view">
-          <img src={selectedFile} alt="" />
           <h3>
-            <span>name: </span>
-            {name}
+            <span>MRI: </span>
+            <img src={mri} alt="" />
           </h3>
           <h3>
-            <span>NIC: </span>
-            {nic}
+            <span>Patient: </span>
+            {patient}
           </h3>
           <h3>
-            <span>email: </span>
-            {email}
+            <strong>Description</strong>
           </h3>
-          <h3>
-            <span>password: </span>
-            {password}
-          </h3>
+          <br />
+          <p>{description}</p>
         </div>
       </section>
     </div>

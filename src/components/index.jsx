@@ -19,14 +19,60 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 export default function Index() {
+  const [doctors, setDoctors] = useState([]);
   const [patients, setPatients] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [mris, setMris] = useState([]);
+  const [patient, setPatient] = useState();
+
+  const [q, setQ] = useState("");
+  const [searchParam] = useState("name");
+
+  const [reports, setReports] = useState([]);
+  const [prescriptions, setPrescriptions] = useState([]);
 
   useEffect(() => {
+    axios.get("http://localhost:9000/doctor").then((response) => {
+      const temp = response.data.doctors;
+      setDoctors(temp);
+      setTimeout(() => {
+        console.log(doctors);
+      }, 100);
+    });
     axios.get("http://localhost:9000/patient").then((response) => {
       const temp = response.data.patients;
       setPatients(temp);
       setTimeout(() => {
         console.log(patients);
+      }, 100);
+    });
+    axios.get("http://localhost:9000/appointment").then((response) => {
+      const temp = response.data.appointments;
+      setAppointments(temp);
+      setTimeout(() => {
+        console.log(appointments);
+      }, 100);
+    });
+    axios.get("http://localhost:9000/mri").then((response) => {
+      const temp = response.data.mris;
+      setMris(temp);
+      setTimeout(() => {
+        console.log(mris);
+      }, 100);
+    });
+
+    axios.get("http://localhost:9000/report").then((response) => {
+      const temp = response.data.Reports;
+      setReports(temp);
+      setTimeout(() => {
+        console.log(reports);
+      }, 100);
+    });
+    axios.get("http://localhost:9000/prescription").then((response) => {
+      const temp = response.data.prescriptions;
+      setPrescriptions(temp);
+      setTimeout(() => {
+        console.log(prescriptions);
       }, 100);
     });
   }, []);
@@ -87,9 +133,6 @@ export default function Index() {
             perferendis sit quis. Nisi, quos fugiat.
           </p>
         </div>
-        <Link to="/LoginForm" className="btn">
-          contact us! <FontAwesomeIcon icon={faChevronRight} />
-        </Link>
       </section>
       {/* <!-- home section ends -->
 
@@ -210,32 +253,40 @@ export default function Index() {
           <h1 className="heading">
             our <span>doctors</span>
           </h1>
-          <input type="text" placeholder="Search.." />
         </div>
 
         <div className="box-container">
-          <div className="box">
-            <img src="images/doc-1.jpg" alt="" />
-            <h3>john deo</h3>
-            <span>expert doctor</span>
-            <div className="share">
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </span>
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </span>
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </span>
-            </div>
-          </div>
+          {doctors.map((value, index) => {
+            return (
+              <div className="box" key={index}>
+                <img src={value.img} alt="" />
+                <h3>{value.name}</h3>
+                <span>{value.nic}</span>
+                <div className="share">
+                  <span>
+                    <Link to={`/ViewDoctor/${value._id}`} className="fa-link">
+                      <FontAwesomeIcon icon={faEye} />
+                    </Link>
+                  </span>
+                  <span>
+                    <Link to={`/EditDoctor/${value._id}`} className="fa-link">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Link>
+                  </span>
+                  <span>
+                    <button
+                      onClick={() => {
+                        deleteDoctor(value._id);
+                      }}
+                      className="fa-link"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -251,7 +302,6 @@ export default function Index() {
           <h1 className="heading">
             our <span>patients</span>
           </h1>
-          <input type="text" placeholder="Search.." />
         </div>
 
         <div className="box-container">
@@ -295,49 +345,43 @@ export default function Index() {
 
       <section className="records" id="appointments">
         <div className="section-head">
-          <Link
-            to="/AppointmentForm"
-            state={{ category: "" }}
-            className="fa fa-eye"
-          >
-            <FontAwesomeIcon icon={faEye} />
-            add+
-          </Link>
           <h1 className="heading">
             our <span>appointments</span>
           </h1>
-          <input type="text" placeholder="Search.." />
         </div>
 
         <div className="box-container">
-          <div className="box text-block">
-            <h3>APPOINTMENT 1</h3>
-            <p>
-              <Link to="/doctor/:id" className="link">
-                doctor
-              </Link>
-              <Link to="/patient/:id" className="link">
-                Patient
-              </Link>
-            </p>
-            <div className="share">
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </span>
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </span>
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </span>
-            </div>
-          </div>
+          {appointments.map((value, index) => {
+            return (
+              <div className="box text-block" key={index}>
+                <h3>APPOINTMENT {index + 1}</h3>
+                <h3>
+                  <span>{value.category}</span>
+                </h3>
+                <p>{formatDate(value.dateTime)}</p>
+                <div className="share">
+                  <span>
+                    <Link
+                      to={`/ViewAppointment/${value._id}`}
+                      className="fa-link"
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                    </Link>
+                  </span>
+                  <span>
+                    <button
+                      onClick={() => {
+                        deleteAppointment(value._id);
+                      }}
+                      className="fa-link"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -347,45 +391,30 @@ export default function Index() {
 
       <section className="records" id="reports">
         <div className="section-head">
-          <Link to="/ReportForm" className="fa fa-eye">
+          <Link to="/MRIForm" className="fa fa-eye">
             <FontAwesomeIcon icon={faEye} />
             add+
           </Link>
           <h1 className="heading">
             some patient <span>reports</span>
           </h1>
-          <input type="text" placeholder="Search.." />
         </div>
 
         <div className="box-container">
-          <div className="box text-block">
-            <h3>REPORT</h3>
-            <p>
-              <Link to="/patient/:id" className="link">
-                patient
-              </Link>
-              <Link to="/mri/:id" className="link">
-                MRI
-              </Link>
-            </p>
-            <div className="share">
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </span>
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </span>
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </span>
-            </div>
-          </div>
+          {reports.map((value, index) => {
+            return (
+              <div className="box" key={index}>
+                <h3>Report {index + 1}</h3>
+                <div className="share">
+                  <span>
+                    <Link to={`/ViewReport/${value._id}`} className="fa-link">
+                      <FontAwesomeIcon icon={faEye} />
+                    </Link>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -402,37 +431,42 @@ export default function Index() {
           <h1 className="heading">
             some <span>prescriptions</span>
           </h1>
-          <input type="text" placeholder="Search.." />
         </div>
         <div className="box-container">
-          <div className="box text-block">
-            <p>
-              <h3>PRESCRIPTION</h3>
-              <Link to="#" className="link">
-                patient
-              </Link>
-              <Link to="#" className="link">
-                Doctor
-              </Link>
-            </p>
-            <div className="share">
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </span>
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faEdit} />
-                </Link>
-              </span>
-              <span>
-                <Link to="#" className="fa-link">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Link>
-              </span>
-            </div>
-          </div>
+          {prescriptions.map((value, index) => {
+            return (
+              <div className="box" key={index}>
+                <h3>prescription {index + 1}</h3>
+                <p>{value.title}</p>
+                <div className="share">
+                  <span>
+                    <Link
+                      to={`/ViewPrescription/${value._id}`}
+                      className="fa-link"
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                    </Link>
+                  </span>
+                  <span>
+                    <Link
+                      to={`/EditPrescription/${value._id}`}
+                      className="fa-link"
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Link>
+                  </span>
+                  <button
+                    onClick={() => {
+                      deletePrescription(value._id);
+                    }}
+                    className="fa-link"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -500,13 +534,62 @@ export default function Index() {
       </section>
     </div>
   );
-  async function deletePatient(id) {
-    const response = await axios.delete(
-      "http://localhost:9000/patient/delete",
-      {
-        patientId: id,
-      }
+
+  function formatDate(val) {
+    var date = new Date(val);
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes + " " + ampm;
+    return (
+      date.getMonth() +
+      1 +
+      "/" +
+      date.getDate() +
+      "/" +
+      date.getFullYear() +
+      "  " +
+      strTime
     );
-    console.log(response);
+  }
+
+  async function deletePatient(id) {
+    const response = await axios
+      .delete(`http://localhost:9000/patient/delete`, {
+        data: { patientId: id },
+      })
+      .then(alert("Patient Successfully Deleted"))
+      .catch()
+      .finally(window.location.reload());
+  }
+  async function deleteDoctor(id) {
+    const response = await axios
+      .delete(`http://localhost:9000/doctor/delete`, {
+        data: { doctorId: id },
+      })
+      .then(alert("Doctor Successfully Deleted"))
+      .catch()
+      .finally(window.location.reload());
+  }
+  async function deleteAppointment(id) {
+    const response = await axios
+      .delete(`http://localhost:9000/appointment/delete`, {
+        data: { id: id },
+      })
+      .then(alert("Appointment Successfully Deleted"))
+      .catch()
+      .finally(window.location.reload());
+  }
+  async function deletePrescription(id) {
+    const response = await axios
+      .delete(`http://localhost:9000/prescription/delete`, {
+        data: { prescriptionId: id },
+      })
+      .then(alert("Prescription Successfully Deleted"))
+      .catch()
+      .finally(window.location.reload());
   }
 }

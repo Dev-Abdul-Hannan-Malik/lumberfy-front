@@ -5,23 +5,22 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import "./styles.css";
 
-export default function PatientForm() {
+export default function DoctorForm() {
   const [name, setName] = useState("");
   const [nic, setNic] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const params = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/patient/${params.id}`).then((response) => {
+    axios.get(`http://localhost:9000/doctor/${params.id}`).then((response) => {
       const temp = response.data;
-      setName(temp.patient.name);
-      setNic(temp.patient.nic);
-      setEmail(temp.patient.email);
-      setPassword(temp.patient.password);
+      setName(temp.doctor.name);
+      setNic(temp.doctor.nic);
+      setEmail(temp.doctor.email);
+      setPassword(temp.doctor.password);
       setTimeout(() => {
         console.log(temp);
       }, 100);
@@ -41,7 +40,7 @@ export default function PatientForm() {
             back
           </Link>
           <h1 className="heading">
-            <span>patient</span>
+            <span>doctor</span>
           </h1>
         </div>
         <div className="view">

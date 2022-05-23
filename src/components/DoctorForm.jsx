@@ -1,32 +1,17 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./styles.css";
 
-export default function PatientForm() {
+export default function DoctorForm() {
   const [name, setName] = useState("");
   const [nic, setNic] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const params = useParams();
-
-  useEffect(() => {
-    axios.get(`http://localhost:9000/patient/${params.id}`).then((response) => {
-      const temp = response.data;
-      setName(temp.patient.name);
-      setNic(temp.patient.nic);
-      setEmail(temp.patient.email);
-      setPassword(temp.patient.password);
-      setTimeout(() => {
-        console.log(temp);
-      }, 100);
-    });
-  }, []);
+  const [imageselected, setimageselected] = useState("");
+  const [image, setimage] = useState("");
 
   return (
     <div className="body">
@@ -41,7 +26,7 @@ export default function PatientForm() {
             back
           </Link>
           <h1 className="heading">
-            <span>edit</span> patient
+            <span>add</span> doctor
           </h1>
         </div>
         <div className="row">
@@ -51,15 +36,15 @@ export default function PatientForm() {
           <form action="" onSubmit={handleSubmit}>
             <input
               type="file"
-              value={selectedFile}
-              onChange={(e) => setSelectedFile(e.target.files[0])}
+              onChange={(event) => {
+                setimageselected(event.target.files[0]);
+              }}
             />
             <input
               onChange={(event) => {
                 setName(event.target.value);
               }}
               type="text"
-              value={name}
               placeholder="name"
               className="box"
               required
@@ -69,7 +54,6 @@ export default function PatientForm() {
                 setNic(event.target.value);
               }}
               type="text"
-              value={nic}
               placeholder="NIC (11111-1111111-1)"
               className="box"
               required
@@ -79,7 +63,6 @@ export default function PatientForm() {
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
-              value={email}
               type="email"
               placeholder="email"
               className="box"
@@ -90,27 +73,13 @@ export default function PatientForm() {
               onChange={(event) => {
                 setPassword(event.target.value);
               }}
-              value={password}
               type="password"
               placeholder="password"
               className="box"
               required
               minLength="6"
             />
-            <input
-              onChange={(event) => {
-                setConfirmPassword(event.target.value);
-              }}
-              type="password"
-              placeholder="repeat password"
-              className="box"
-            />
-            <button
-              disabled={passwordsMatched}
-              type="submit"
-              value="submit"
-              className="btn"
-            >
+            <button type="submit" value="submit" className="btn">
               submit
             </button>
           </form>
@@ -118,21 +87,30 @@ export default function PatientForm() {
       </section>
     </div>
   );
-  function passwordsMatched() {
-    return password === confirmPassword;
-  }
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
-    const response = await axios.put("http://localhost:9000/patient/edit", {
-      patientId: params.id,
-      name,
-      email,
-      nic,
-      password,
-      confirmPassword,
-    });
-    alert(response.data.message);
-    console.log(response);
-    window.location.replace("/");
+    console.log(imageselected);
+    const formData = new FormData();
+    formData.append("file", imageselected);
+    formData.append("upload_preset", "dd5ururm");
+    axios
+      .post("https://api.cloudinary.com/v1_1/drimnkool/upload", formData)
+      .then((response) => {
+        console.log(response.data.secure_url);
+        setimage(response.data.secure_url);
+        var testImage = response.data.secure_url;
+        axios
+          .post("http://localhost:9000/doctor/add", {
+            image: testImage,
+            name,
+            email,
+            nic,
+            password,
+          })
+          .then((response) => {
+            alert(response.data.message);
+            console.log(response);
+          });
+      });
   }
 }

@@ -18,7 +18,7 @@ export default function PatientForm() {
       <section className="book" id="book">
         <div className="section-head" style={{ justifyContent: "center" }}>
           <Link
-            to="/"
+            to="/Index"
             className="fa fa-arrow-left"
             style={{ marginRight: "10rem" }}
           >
