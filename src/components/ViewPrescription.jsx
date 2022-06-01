@@ -18,7 +18,7 @@ export default function PrescriptionForm() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:9000/prescription/${params.id}`)
+      .get(`http://lumbarfy-server.herokuapp.com/prescription/${params.id}`)
       .then((response) => {
         const temp = response.data;
         setTitle(temp.prescription.title);
@@ -29,12 +29,16 @@ export default function PrescriptionForm() {
           console.log(temp);
         }, 100);
       });
-    axios.get(`http://localhost:9000/patient/${patientId}`).then((response) => {
-      setPatient(response["data"]["patients"][0]["name"]);
-    });
-    axios.get(`http://localhost:9000/doctor/${doctorId}`).then((response) => {
-      setDoctor(response["data"]["doctors"][0]["name"]);
-    });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/patient/${patientId}`)
+      .then((response) => {
+        setPatient(response["data"]["patients"][0]["name"]);
+      });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/doctor/${doctorId}`)
+      .then((response) => {
+        setDoctor(response["data"]["doctors"][0]["name"]);
+      });
   }, []);
 
   return (

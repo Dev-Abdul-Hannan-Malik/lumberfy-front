@@ -15,16 +15,18 @@ export default function DoctorForm() {
   const params = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/doctor/${params.id}`).then((response) => {
-      const temp = response.data;
-      setName(temp.doctor.name);
-      setNic(temp.doctor.nic);
-      setEmail(temp.doctor.email);
-      setPassword(temp.doctor.password);
-      setTimeout(() => {
-        console.log(temp);
-      }, 100);
-    });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/doctor/${params.id}`)
+      .then((response) => {
+        const temp = response.data;
+        setName(temp.doctor.name);
+        setNic(temp.doctor.nic);
+        setEmail(temp.doctor.email);
+        setPassword(temp.doctor.password);
+        setTimeout(() => {
+          console.log(temp);
+        }, 100);
+      });
   }, []);
 
   return (

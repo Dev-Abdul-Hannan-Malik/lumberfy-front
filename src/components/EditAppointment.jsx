@@ -20,18 +20,22 @@ export default function AppointmentForm() {
   const params = useParams();
 
   useEffect(() => {
-    axios.get("http://localhost:9000/doctor").then((response) => {
-      const temp = response.data.doctors;
-      setDoctors(temp);
-      setTimeout(() => {}, 100);
-    });
-    axios.get("http://localhost:9000/patient").then((response) => {
-      const temp = response.data.patients;
-      setPatients(temp);
-      setTimeout(() => {}, 100);
-    });
     axios
-      .get(`http://localhost:9000/appointment/${params.id}`)
+      .get("http://lumbarfy-server.herokuapp.com/doctor")
+      .then((response) => {
+        const temp = response.data.doctors;
+        setDoctors(temp);
+        setTimeout(() => {}, 100);
+      });
+    axios
+      .get("http://lumbarfy-server.herokuapp.com/patient")
+      .then((response) => {
+        const temp = response.data.patients;
+        setPatients(temp);
+        setTimeout(() => {}, 100);
+      });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/appointment/${params.id}`)
       .then((response) => {
         const temp = response.data;
         setCategory(temp.appointment.category);
@@ -171,7 +175,7 @@ export default function AppointmentForm() {
     setDateTime(new Date(date + " " + time));
     event.preventDefault();
     axios
-      .put("http://localhost:9000/appointment/edit", {
+      .put("http://lumbarfy-server.herokuapp.com/appointment/edit", {
         appointmentId: params.id,
         category,
         dateTime,
@@ -181,7 +185,7 @@ export default function AppointmentForm() {
       .then((response) => {
         alert(response.data.message);
         console.log(response);
-        window.location.reload();
+        window.location.replace("/Index");
       })
       .catch((error) => {
         alert(error.message);

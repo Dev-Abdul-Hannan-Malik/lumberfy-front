@@ -18,12 +18,12 @@ export default function AppointmentForm() {
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:9000/doctor").then((response) => {
+    axios.get("http://lumbarfy-server.herokuapp.com/doctor").then((response) => {
       const temp = response.data.doctors;
       setDoctors(temp);
       setTimeout(() => {}, 100);
     });
-    axios.get("http://localhost:9000/patient").then((response) => {
+    axios.get("http://lumbarfy-server.herokuapp.com/patient").then((response) => {
       const temp = response.data.patients;
       setPatients(temp);
       setTimeout(() => {}, 100);
@@ -160,7 +160,7 @@ export default function AppointmentForm() {
     setDateTime(new Date(date + " " + time));
     event.preventDefault();
     axios
-      .post("http://localhost:9000/appointment/add", {
+      .post("http://lumbarfy-server.herokuapp.com/appointment/add", {
         category,
         dateTime,
         patientId,
@@ -169,7 +169,7 @@ export default function AppointmentForm() {
       .then((response) => {
         alert(response.data.message);
         console.log(response);
-        window.location.reload();
+        window.location.replace("/Index");
       })
       .catch((error) => {
         alert(error.message);

@@ -16,21 +16,27 @@ export default function ReportForm() {
   const params = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/report/${params.id}`).then((response) => {
-      const temp = response.data;
-      setDescription(temp.report.description);
-      setMriId(temp.report.mriId);
-      setPatientId(temp.report.patientId);
-      setTimeout(() => {
-        console.log(temp);
-      }, 100);
-    });
-    axios.get(`http://localhost:9000/patient/${patientId}`).then((response) => {
-      setPatient(response["data"]["patients"][0]["name"]);
-    });
-    axios.get(`http://localhost:9000/mri/${mriId}`).then((response) => {
-      setMri(response["data"]["mris"][0]["image"]);
-    });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/report/${params.id}`)
+      .then((response) => {
+        const temp = response.data;
+        setDescription(temp.report.description);
+        setMriId(temp.report.mriId);
+        setPatientId(temp.report.patientId);
+        setTimeout(() => {
+          console.log(temp);
+        }, 100);
+      });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/patient/${patientId}`)
+      .then((response) => {
+        setPatient(response["data"]["patients"][0]["name"]);
+      });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/mri/${mriId}`)
+      .then((response) => {
+        setMri(response["data"]["mris"][0]["image"]);
+      });
   }, []);
 
   return (
@@ -51,8 +57,9 @@ export default function ReportForm() {
         </div>
         <div className="view">
           <h3>
-            <span>MRI: </span>
             <img src={mri} alt="" />
+            <br />
+            <h1>MRI</h1>
           </h3>
           <h3>
             <span>Patient: </span>
@@ -67,4 +74,6 @@ export default function ReportForm() {
       </section>
     </div>
   );
+
+  function formatDescription(word) {}
 }

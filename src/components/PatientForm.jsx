@@ -11,7 +11,6 @@ export default function PatientForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <div className="body">
@@ -35,9 +34,14 @@ export default function PatientForm() {
           </div>
           <form action="" onSubmit={handleSubmit}>
             <input
-              type="file"
-              value={selectedFile}
-              onChange={(e) => setSelectedFile(e.target.files[0])}
+              type={"file"}
+              id="image"
+              name="image"
+              required
+              accept="image/png, image/jpeg, image/jfif, image/JPG"
+              onChange={(e) => {
+                setSelectedFile(e.target.files[0]);
+              }}
             />
             <input
               onChange={(event) => {
@@ -78,20 +82,7 @@ export default function PatientForm() {
               required
               minLength="6"
             />
-            <input
-              onChange={(event) => {
-                setConfirmPassword(event.target.value);
-              }}
-              type="password"
-              placeholder="repeat password"
-              className="box"
-            />
-            <button
-              disabled={passwordsMatched}
-              type="submit"
-              value="submit"
-              className="btn"
-            >
+            <button type="submit" value="submit" className="btn">
               submit
             </button>
           </form>
@@ -99,22 +90,40 @@ export default function PatientForm() {
       </section>
     </div>
   );
-  function passwordsMatched() {
-    return password === confirmPassword;
-  }
   function handleSubmit(event) {
     event.preventDefault();
-    axios
-      .post("http://localhost:9000/patient/add", {
-        name,
-        email,
-        nic,
-        password,
-        confirmPassword,
+    const data = new FormData();
+    data.append("file", selectedFile);
+    data.append("upload_preset", "nmwq0jmk");
+    data.append("cloud_name", "murakaze");
+    fetch("https://api.cloudinary.com/v1_1/murakaze/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSelectedFile(data.url.toString());
+        console.log(selectedFile);
+        axios
+          .post("http://lumbarfy-server.herokuapp.com/patient/add", {
+            name,
+            email,
+            nic,
+            password,
+            image: selectedFile,
+          })
+          .then((response) => {
+            alert(response.data.message);
+            window.location.replace("/Index");
+            console.log(response);
+          })
+          .catch((err) => {
+            console.log("Error is: " + err);
+          });
       })
-      .then((response) => {
-        alert(response.data.message);
-        console.log(response);
+      .catch((err) => {
+        console.log("Error is: " + err);
       });
+    event.preventDefault();
   }
 }

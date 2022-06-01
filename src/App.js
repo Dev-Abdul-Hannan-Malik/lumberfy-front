@@ -4,10 +4,9 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import Index from "./components/index";
-import Test from "./components/Test";
 import LoginForm from "./components/LoginForm";
 
-import DoctorForm from "./components/DoctorForm";
+import DoctorForm from "./components/Doctor/DoctorForm";
 import EditDoctor from "./components/EditDoctor";
 import ViewDoctor from "./components/ViewDoctor";
 
@@ -32,10 +31,9 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<LoginForm />} />
-        <Route exact path="/Test" element={<Test />} />
         <Route exact path="/Index" element={<Index />} />
 
-        <Route exact path="/DoctorForm" element={<DoctorForm />} />
+        <Route exact path="/Doctor/DoctorForm" element={<DoctorForm />} />
         <Route exact path="/ViewDoctor/:id" element={<ViewDoctor />} />
         <Route exact path="/EditDoctor/:id" element={<ViewDoctor />} />
 

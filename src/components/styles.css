@@ -435,14 +435,13 @@ select {
   justify-content: center;
 }
 
+.book .view h1 {
+  text-align: center;
+}
+
 .book .view span {
   font-size: 1.5rem;
   color: var(--green);
-}
-
-.book .view h3:hover {
-  transition: all 0.5s ease;
-  transform: translate(2rem, 0);
 }
 
 .book .row .image img {

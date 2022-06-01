@@ -16,16 +16,18 @@ export default function DoctorForm() {
   const params = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/doctor/${params.id}`).then((response) => {
-      const temp = response.data;
-      setName(temp.doctor.name);
-      setNic(temp.doctor.nic);
-      setEmail(temp.doctor.email);
-      setPassword(temp.doctor.password);
-      setTimeout(() => {
-        console.log(temp);
-      }, 100);
-    });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/doctor/${params.id}`)
+      .then((response) => {
+        const temp = response.data;
+        setName(temp.doctor.name);
+        setNic(temp.doctor.nic);
+        setEmail(temp.doctor.email);
+        setPassword(temp.doctor.password);
+        setTimeout(() => {
+          console.log(temp);
+        }, 100);
+      });
   }, []);
 
   return (
@@ -123,16 +125,19 @@ export default function DoctorForm() {
   }
   async function handleSubmit(event) {
     event.preventDefault();
-    const response = await axios.put("http://localhost:9000/doctor/edit", {
-      doctorId: params.id,
-      name,
-      email,
-      nic,
-      password,
-      confirmPassword,
-    });
+    const response = await axios.put(
+      "http://lumbarfy-server.herokuapp.com/doctor/edit",
+      {
+        doctorId: params.id,
+        name,
+        email,
+        nic,
+        password,
+        confirmPassword,
+      }
+    );
     alert(response.data.message);
     console.log(response);
-    window.location.replace("/");
+    window.location.replace("/Index");
   }
 }

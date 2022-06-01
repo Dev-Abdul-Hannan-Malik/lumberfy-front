@@ -32,28 +32,34 @@ export default function Index() {
   const [prescriptions, setPrescriptions] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:9000/doctor").then((response) => {
-      const temp = response.data.doctors;
-      setDoctors(temp);
-      setTimeout(() => {
-        console.log(doctors);
-      }, 100);
-    });
-    axios.get("http://localhost:9000/patient").then((response) => {
-      const temp = response.data.patients;
-      setPatients(temp);
-      setTimeout(() => {
-        console.log(patients);
-      }, 100);
-    });
-    axios.get("http://localhost:9000/appointment").then((response) => {
-      const temp = response.data.appointments;
-      setAppointments(temp);
-      setTimeout(() => {
-        console.log(appointments);
-      }, 100);
-    });
-    axios.get("http://localhost:9000/mri").then((response) => {
+    axios
+      .get("http://lumbarfy-server.herokuapp.com/doctor")
+      .then((response) => {
+        const temp = response.data.doctors;
+        setDoctors(temp);
+        setTimeout(() => {
+          console.log(doctors);
+        }, 100);
+      });
+    axios
+      .get("http://lumbarfy-server.herokuapp.com/patient")
+      .then((response) => {
+        const temp = response.data.patients;
+        setPatients(temp);
+        setTimeout(() => {
+          console.log(patients);
+        }, 100);
+      });
+    axios
+      .get("http://lumbarfy-server.herokuapp.com/appointment")
+      .then((response) => {
+        const temp = response.data.appointments;
+        setAppointments(temp);
+        setTimeout(() => {
+          console.log(appointments);
+        }, 100);
+      });
+    axios.get("http://lumbarfy-server.herokuapp.com/mri").then((response) => {
       const temp = response.data.mris;
       setMris(temp);
       setTimeout(() => {
@@ -61,56 +67,71 @@ export default function Index() {
       }, 100);
     });
 
-    axios.get("http://localhost:9000/report").then((response) => {
-      const temp = response.data.Reports;
-      setReports(temp);
-      setTimeout(() => {
-        console.log(reports);
-      }, 100);
-    });
-    axios.get("http://localhost:9000/prescription").then((response) => {
-      const temp = response.data.prescriptions;
-      setPrescriptions(temp);
-      setTimeout(() => {
-        console.log(prescriptions);
-      }, 100);
-    });
+    axios
+      .get("http://lumbarfy-server.herokuapp.com/report")
+      .then((response) => {
+        const temp = response.data.Reports;
+        setReports(temp);
+        setTimeout(() => {
+          console.log(reports);
+        }, 100);
+      });
+    axios
+      .get("http://lumbarfy-server.herokuapp.com/prescription")
+      .then((response) => {
+        const temp = response.data.prescriptions;
+        setPrescriptions(temp);
+        setTimeout(() => {
+          console.log(prescriptions);
+        }, 100);
+      });
   }, []);
 
   return (
     <div className="body">
       <header className="header">
-        <Link to="#" className="logo">
+        <Link to="/Index#home" className="logo">
           <i className="fas fa-heartbeat">
             <FontAwesomeIcon icon={faHeartbeat}></FontAwesomeIcon> LumbarFY
           </i>
         </Link>
 
         <nav className="navbar">
-          <button onClick={() => window.location.replace("/#home")}>
+          <button onClick={() => window.location.replace("/Index#home")}>
             home
           </button>
-          <button onClick={() => window.location.replace("/#services")}>
+          <button onClick={() => window.location.replace("/Index#services")}>
             services
           </button>
-          <button onClick={() => window.location.replace("/#about")}>
+          <button onClick={() => window.location.replace("/Index#about")}>
             about
           </button>
-          <button onClick={() => window.location.replace("/#doctors")}>
+          <button onClick={() => window.location.replace("/Index#doctors")}>
             doctors
           </button>
-          <button onClick={() => window.location.replace("/#patients")}>
+          <button onClick={() => window.location.replace("/Index#patients")}>
             patients
           </button>
-          <button onClick={() => window.location.replace("/#appointments")}>
+          <button
+            onClick={() => window.location.replace("/Index#appointments")}
+          >
             appointments
           </button>
-          <button onClick={() => window.location.replace("/#reports")}>
+          <button onClick={() => window.location.replace("/Index#reports")}>
             reports
           </button>
-          <button onClick={() => window.location.replace("/#prescriptions")}>
+          <button
+            onClick={() => window.location.replace("/Index#prescriptions")}
+          >
             prescriptions
           </button>
+          <input
+            type="text"
+            className="form-control"
+            // value={filter}
+            // onChange={searchtext.bind(this)}
+            placeholder="Search Here"
+          ></input>
         </nav>
 
         <div id="menu-btn">
@@ -245,7 +266,7 @@ export default function Index() {
 <!-- doctor section starts --> */}
       <section className="records" id="doctors">
         <div className="section-head">
-          <Link to="/DoctorForm">
+          <Link to="/Doctor/DoctorForm">
             <FontAwesomeIcon icon={faEye} />
             add+
           </Link>
@@ -259,7 +280,7 @@ export default function Index() {
           {doctors.map((value, index) => {
             return (
               <div className="box" key={index}>
-                <img src={value.img} alt="" />
+                <img src={value.image} alt="" />
                 <h3>{value.name}</h3>
                 <span>{value.nic}</span>
                 <div className="share">
@@ -308,7 +329,7 @@ export default function Index() {
           {patients.map((value, index) => {
             return (
               <div className="box" key={index}>
-                <img src={value.img} alt="" />
+                <img src={value.image} alt="" />
                 <h3>{value.name}</h3>
                 <span>{value.nic}</span>
                 <div className="share">
@@ -356,7 +377,12 @@ export default function Index() {
               <div className="box text-block" key={index}>
                 <h3>APPOINTMENT {index + 1}</h3>
                 <h3>
-                  <span>{value.category}</span>
+                  DOCTOR:
+                  <span> {value.doctorId}</span>
+                </h3>
+                <h3>
+                  PATIENT:
+                  <span> {value.patientId}</span>
                 </h3>
                 <p>{formatDate(value.dateTime)}</p>
                 <div className="share">
@@ -558,7 +584,7 @@ export default function Index() {
 
   async function deletePatient(id) {
     const response = await axios
-      .delete(`http://localhost:9000/patient/delete`, {
+      .delete(`http://lumbarfy-server.herokuapp.com/patient/delete`, {
         data: { patientId: id },
       })
       .then(alert("Patient Successfully Deleted"))
@@ -567,7 +593,7 @@ export default function Index() {
   }
   async function deleteDoctor(id) {
     const response = await axios
-      .delete(`http://localhost:9000/doctor/delete`, {
+      .delete(`http://lumbarfy-server.herokuapp.com/doctor/delete`, {
         data: { doctorId: id },
       })
       .then(alert("Doctor Successfully Deleted"))
@@ -576,7 +602,7 @@ export default function Index() {
   }
   async function deleteAppointment(id) {
     const response = await axios
-      .delete(`http://localhost:9000/appointment/delete`, {
+      .delete(`http://lumbarfy-server.herokuapp.com/appointment/delete`, {
         data: { id: id },
       })
       .then(alert("Appointment Successfully Deleted"))
@@ -585,7 +611,7 @@ export default function Index() {
   }
   async function deletePrescription(id) {
     const response = await axios
-      .delete(`http://localhost:9000/prescription/delete`, {
+      .delete(`http://lumbarfy-server.herokuapp.com/prescription/delete`, {
         data: { prescriptionId: id },
       })
       .then(alert("Prescription Successfully Deleted"))

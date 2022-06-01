@@ -16,16 +16,18 @@ export default function PatientForm() {
   const params = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/patient/${params.id}`).then((response) => {
-      const temp = response.data;
-      setName(temp.patient.name);
-      setNic(temp.patient.nic);
-      setEmail(temp.patient.email);
-      setPassword(temp.patient.password);
-      setTimeout(() => {
-        console.log(temp);
-      }, 100);
-    });
+    axios
+      .get(`http://lumbarfy-server.herokuapp.com/patient/${params.id}`)
+      .then((response) => {
+        const temp = response.data;
+        setName(temp.patient.name);
+        setNic(temp.patient.nic);
+        setEmail(temp.patient.email);
+        setPassword(temp.patient.password);
+        setTimeout(() => {
+          console.log(temp);
+        }, 100);
+      });
   }, []);
 
   return (

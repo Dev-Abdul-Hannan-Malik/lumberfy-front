@@ -15,27 +15,31 @@ export default function PatientForm() {
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:9000/doctor").then((response) => {
-      const temp = response.data.doctors;
-      setDoctors(temp);
-      setTimeout(() => {
-        console.log(doctors);
-      }, 100);
-    });
-    axios.get("http://localhost:9000/patient").then((response) => {
-      const temp = response.data.patients;
-      setPatients(temp);
-      setTimeout(() => {
-        console.log(patients);
-      }, 100);
-    });
+    axios
+      .get("http://lumbarfy-server.herokuapp.com/doctor")
+      .then((response) => {
+        const temp = response.data.doctors;
+        setDoctors(temp);
+        setTimeout(() => {
+          console.log(doctors);
+        }, 100);
+      });
+    axios
+      .get("http://lumbarfy-server.herokuapp.com/patient")
+      .then((response) => {
+        const temp = response.data.patients;
+        setPatients(temp);
+        setTimeout(() => {
+          console.log(patients);
+        }, 100);
+      });
   }, []);
 
   const params = useParams();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:9000/prescription/${params.id}`)
+      .get(`http://lumbarfy-server.herokuapp.com/prescription/${params.id}`)
       .then((response) => {
         const temp = response.data;
         setTitle(temp.prescription.title);
@@ -122,7 +126,7 @@ export default function PatientForm() {
   function handleSubmit(event) {
     event.preventDefault();
     axios
-      .put("http://localhost:9000/prescription/edit", {
+      .put("http://lumbarfy-server.herokuapp.com/prescription/edit", {
         prescriptionId: params.id,
         title,
         description,
@@ -132,7 +136,7 @@ export default function PatientForm() {
       .then((response) => {
         alert(response.data.message);
         console.log(response);
-        window.location.replace("/");
+        window.location.replace("/Index");
       });
   }
 }

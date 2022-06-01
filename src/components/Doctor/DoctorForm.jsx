@@ -3,15 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "./styles.css";
+import "../styles.css";
 
 export default function DoctorForm() {
   const [name, setName] = useState("");
   const [nic, setNic] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [imageselected, setimageselected] = useState("");
-  const [image, setimage] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   return (
     <div className="body">
@@ -35,9 +34,13 @@ export default function DoctorForm() {
           </div>
           <form action="" onSubmit={handleSubmit}>
             <input
-              type="file"
-              onChange={(event) => {
-                setimageselected(event.target.files[0]);
+              type={"file"}
+              id="image"
+              name="image"
+              required
+              accept="image/png, image/jpeg, image/jfif, image/JPG"
+              onChange={(e) => {
+                setSelectedFile(e.target.files[0]);
               }}
             />
             <input
@@ -89,28 +92,38 @@ export default function DoctorForm() {
   );
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(imageselected);
-    const formData = new FormData();
-    formData.append("file", imageselected);
-    formData.append("upload_preset", "dd5ururm");
-    axios
-      .post("https://api.cloudinary.com/v1_1/drimnkool/upload", formData)
-      .then((response) => {
-        console.log(response.data.secure_url);
-        setimage(response.data.secure_url);
-        var testImage = response.data.secure_url;
+    const data = new FormData();
+    data.append("file", selectedFile);
+    data.append("upload_preset", "nmwq0jmk");
+    data.append("cloud_name", "murakaze");
+    fetch("https://api.cloudinary.com/v1_1/murakaze/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSelectedFile(data.url.toString());
+        console.log(selectedFile);
         axios
-          .post("http://localhost:9000/doctor/add", {
-            image: testImage,
+          .post("http://lumbarfy-server.herokuapp.com/doctor/add", {
             name,
             email,
             nic,
             password,
+            image: selectedFile,
           })
           .then((response) => {
             alert(response.data.message);
+            window.location.replace("/Index");
             console.log(response);
+          })
+          .catch((err) => {
+            console.log("Error is: " + err);
           });
+      })
+      .catch((err) => {
+        console.log("Error is: " + err);
       });
+    event.preventDefault();
   }
 }

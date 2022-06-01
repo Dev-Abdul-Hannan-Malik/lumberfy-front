@@ -19,7 +19,7 @@ export default function AppointmentForm() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:9000/appointment/${params.id}`)
+      .get(`http://lumbarfy-server.herokuapp.com/appointment/${params.id}`)
       .then((response) => {
         const temp = response.data;
         setCategory(temp.appointment.category);
@@ -27,19 +27,19 @@ export default function AppointmentForm() {
         setPatientId(temp.appointment.patientId);
         setDoctorId(temp.appointment.doctorId);
         axios
-          .get(`http://localhost:9000/patient/${patientId}`)
+          .get(`http://lumbarfy-server.herokuapp.com/patient/${patientId}`)
           .then((response) => {
             setPatient(response["data"]["patients"][0]["name"]);
           });
         axios
-          .get(`http://localhost:9000/doctor/${doctorId}`)
+          .get(`http://lumbarfy-server.herokuapp.com/doctor/${doctorId}`)
           .then((response) => {
             setDoctor(response["data"]["doctors"][0]["name"]);
           });
       });
   }, []);
   // useEffect(() => {
-  //   axios.get(`http://localhost:9000/doctor/${doctorId}`).then((response) => {
+  //   axios.get(`http://lumbarfy-server.herokuapp.com/doctor/${doctorId}`).then((response) => {
   //     console.log(response);
   //   });
   // });
@@ -57,7 +57,7 @@ export default function AppointmentForm() {
             back
           </Link>
           <h1 className="heading">
-            <span>appointment</span>
+            <span>appoin tment</span>
           </h1>
         </div>
         <div className="view">
@@ -66,8 +66,12 @@ export default function AppointmentForm() {
             {category}
           </h3>
           <h3>
-            <span>Date/Time: </span>
+            <span>Date: </span>
             {formatDate(dateTime)}
+          </h3>
+          <h3>
+            <span>Time: </span>
+            {formatTime(dateTime)}
           </h3>
           <h3>
             <span>patient: </span>
@@ -81,6 +85,17 @@ export default function AppointmentForm() {
       </section>
     </div>
   );
+  function formatTime(val) {
+    var date = new Date(val);
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes + " " + ampm;
+    return strTime;
+  }
   function formatDate(val) {
     var date = new Date(val);
     var hours = date.getHours();
@@ -97,8 +112,7 @@ export default function AppointmentForm() {
       date.getDate() +
       "/" +
       date.getFullYear() +
-      "  " +
-      strTime
+      "  "
     );
   }
 }
