@@ -24,6 +24,7 @@ export default function PatientForm() {
         setNic(temp.patient.nic);
         setEmail(temp.patient.email);
         setPassword(temp.patient.password);
+        setSelectedFile(temp.patient.image);
         setTimeout(() => {
           console.log(temp);
         }, 100);
@@ -47,7 +48,7 @@ export default function PatientForm() {
           </h1>
         </div>
         <div className="view">
-          <img src={selectedFile} alt="" />
+          <img className="profile" src={selectedFile} alt="" />
           <h3>
             <span>name: </span>
             {name}

@@ -24,7 +24,7 @@ export default function ReportForm() {
         setMriId(temp.report.mriId);
         setPatientId(temp.report.patientId);
         setTimeout(() => {
-          console.log(temp);
+          // console.log(temp);
         }, 100);
       });
     axios
@@ -69,11 +69,13 @@ export default function ReportForm() {
             <strong>Description</strong>
           </h3>
           <br />
-          <p>{description}</p>
+          <p>
+            {description.split("\n").map((value) => {
+              return <p>{value}</p>;
+            })}
+          </p>
         </div>
       </section>
     </div>
   );
-
-  function formatDescription(word) {}
 }

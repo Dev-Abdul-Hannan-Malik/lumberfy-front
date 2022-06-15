@@ -22,10 +22,9 @@ export default function Index() {
   const [doctors, setDoctors] = useState([]);
   const [patients, setPatients] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [patient, setPatient] = useState("");
+  const [doctor, setDoctor] = useState("");
   const [mris, setMris] = useState([]);
-  const [patient, setPatient] = useState();
-
-  const [q, setQ] = useState("");
   const [searchParam] = useState("name");
 
   const [reports, setReports] = useState([]);
@@ -38,7 +37,7 @@ export default function Index() {
         const temp = response.data.doctors;
         setDoctors(temp);
         setTimeout(() => {
-          console.log(doctors);
+          // console.log(doctors);
         }, 100);
       });
     axios
@@ -47,7 +46,7 @@ export default function Index() {
         const temp = response.data.patients;
         setPatients(temp);
         setTimeout(() => {
-          console.log(patients);
+          // console.log(patients);
         }, 100);
       });
     axios
@@ -56,14 +55,14 @@ export default function Index() {
         const temp = response.data.appointments;
         setAppointments(temp);
         setTimeout(() => {
-          console.log(appointments);
+          // console.log(appointments);
         }, 100);
       });
     axios.get("http://lumbarfy-server.herokuapp.com/mri").then((response) => {
       const temp = response.data.mris;
       setMris(temp);
       setTimeout(() => {
-        console.log(mris);
+        // console.log(mris);
       }, 100);
     });
 
@@ -73,7 +72,7 @@ export default function Index() {
         const temp = response.data.Reports;
         setReports(temp);
         setTimeout(() => {
-          console.log(reports);
+          // console.log(reports);
         }, 100);
       });
     axios
@@ -82,7 +81,7 @@ export default function Index() {
         const temp = response.data.prescriptions;
         setPrescriptions(temp);
         setTimeout(() => {
-          console.log(prescriptions);
+          // console.log(prescriptions);
         }, 100);
       });
   }, []);
@@ -100,9 +99,9 @@ export default function Index() {
           <button onClick={() => window.location.replace("/Index#home")}>
             home
           </button>
-          <button onClick={() => window.location.replace("/Index#services")}>
+          {/* <button onClick={() => window.location.replace("/Index#services")}>
             services
-          </button>
+          </button> */}
           <button onClick={() => window.location.replace("/Index#about")}>
             about
           </button>
@@ -125,13 +124,13 @@ export default function Index() {
           >
             prescriptions
           </button>
-          <input
+          {/* <input
             type="text"
             className="form-control"
             // value={filter}
             // onChange={searchtext.bind(this)}
             placeholder="Search Here"
-          ></input>
+          ></input> */}
         </nav>
 
         <div id="menu-btn">
@@ -158,7 +157,7 @@ export default function Index() {
       {/* <!-- home section ends -->
 
 <!-- services section start --> */}
-
+      {/*
       <section className="services" id="services">
         <h1 className="heading">
           our <span>services</span>
@@ -236,7 +235,7 @@ export default function Index() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* <!-- services section end -->
 
@@ -266,14 +265,13 @@ export default function Index() {
 <!-- doctor section starts --> */}
       <section className="records" id="doctors">
         <div className="section-head">
+          <h1 className="heading">
+            our <span>doctors</span>
+          </h1>
           <Link to="/Doctor/DoctorForm">
             <FontAwesomeIcon icon={faEye} />
             add+
           </Link>
-
-          <h1 className="heading">
-            our <span>doctors</span>
-          </h1>
         </div>
 
         <div className="box-container">
@@ -281,8 +279,13 @@ export default function Index() {
             return (
               <div className="box" key={index}>
                 <img src={value.image} alt="" />
-                <h3>{value.name}</h3>
-                <span>{value.nic}</span>
+                <h3>
+                  NAME:
+                  <span>{value.name}</span>
+                </h3>
+                <h3>
+                  NIC: <span>{value.nic}</span>
+                </h3>
                 <div className="share">
                   <span>
                     <Link to={`/ViewDoctor/${value._id}`} className="fa-link">
@@ -316,13 +319,13 @@ export default function Index() {
 <!-- patient section starts --> */}
       <section className="records" id="patients">
         <div className="section-head">
+          <h1 className="heading">
+            our <span>patients</span>
+          </h1>
           <Link to="/PatientForm" className="fa fa-eye">
             <FontAwesomeIcon icon={faEye} />
             add+
           </Link>
-          <h1 className="heading">
-            our <span>patients</span>
-          </h1>
         </div>
 
         <div className="box-container">
@@ -330,8 +333,13 @@ export default function Index() {
             return (
               <div className="box" key={index}>
                 <img src={value.image} alt="" />
-                <h3>{value.name}</h3>
-                <span>{value.nic}</span>
+                <h3>
+                  NAME:
+                  <span>{value.name}</span>
+                </h3>
+                <h3>
+                  NIC: <span>{value.nic}</span>
+                </h3>
                 <div className="share">
                   <span>
                     <Link to={`/ViewPatient/${value._id}`} className="fa-link">
@@ -375,14 +383,29 @@ export default function Index() {
           {appointments.map((value, index) => {
             return (
               <div className="box text-block" key={index}>
-                <h3>APPOINTMENT {index + 1}</h3>
                 <h3>
-                  DOCTOR:
-                  <span> {value.doctorId}</span>
+                  CATEGORY:
+                  <span> {value.category}</span>
                 </h3>
                 <h3>
                   PATIENT:
-                  <span> {value.patientId}</span>
+                  <span>
+                    {patients.map((data) => {
+                      if (data._id === value.patientId) {
+                        return data.name;
+                      }
+                    })}
+                  </span>
+                </h3>
+                <h3>
+                  DOCTOR:
+                  <span>
+                    {doctors.map((data) => {
+                      if (data._id === value.doctorId) {
+                        return data.name;
+                      }
+                    })}
+                  </span>
                 </h3>
                 <p>{formatDate(value.dateTime)}</p>
                 <div className="share">
@@ -417,13 +440,13 @@ export default function Index() {
 
       <section className="records" id="reports">
         <div className="section-head">
+          <h1 className="heading">
+            some patient <span>reports</span>
+          </h1>
           <Link to="/MRIForm" className="fa fa-eye">
             <FontAwesomeIcon icon={faEye} />
             add+
           </Link>
-          <h1 className="heading">
-            some patient <span>reports</span>
-          </h1>
         </div>
 
         <div className="box-container">
@@ -431,12 +454,37 @@ export default function Index() {
             return (
               <div className="box" key={index}>
                 <h3>Report {index + 1}</h3>
+                {mris.map((data) => {
+                  if (data._id === value.mriId) {
+                    return <img src={data.image} alt="" />;
+                  }
+                })}
+                <h3>
+                  PATIENT:
+                  <span>
+                    {patients.map((data) => {
+                      if (data._id === value.patientId) {
+                        return data.name;
+                      }
+                    })}
+                  </span>
+                </h3>
                 <div className="share">
                   <span>
                     <Link to={`/ViewReport/${value._id}`} className="fa-link">
                       <FontAwesomeIcon icon={faEye} />
                     </Link>
                   </span>
+                  {/* <span>
+                    <button
+                      onClick={() => {
+                        deleteReport(value._id, value.mriId);
+                      }}
+                      className="fa-link"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </span> */}
                 </div>
               </div>
             );
@@ -450,20 +498,42 @@ export default function Index() {
 
       <section className="records" id="prescriptions">
         <div className="section-head">
-          <Link to="/PrescriptionForm" className="fa fa-eye">
-            <FontAwesomeIcon icon={faEye} />
-            add+
-          </Link>
           <h1 className="heading">
             some <span>prescriptions</span>
           </h1>
+          {/* <Link to="/PrescriptionForm" className="fa fa-eye">
+            <FontAwesomeIcon icon={faEye} />
+            add+
+          </Link> */}
         </div>
         <div className="box-container">
           {prescriptions.map((value, index) => {
             return (
               <div className="box" key={index}>
                 <h3>prescription {index + 1}</h3>
-                <p>{value.title}</p>
+                <h3>
+                  TITLE: <span>{value.title}</span>
+                </h3>
+                <h3>
+                  PATIENT:
+                  <span>
+                    {patients.map((data) => {
+                      if (data._id === value.patientId) {
+                        return data.name;
+                      }
+                    })}
+                  </span>
+                </h3>
+                <h3>
+                  DOCTOR:
+                  <span>
+                    {doctors.map((data) => {
+                      if (data._id === value.doctorId) {
+                        return data.name;
+                      }
+                    })}
+                  </span>
+                </h3>
                 <div className="share">
                   <span>
                     <Link
@@ -474,21 +544,15 @@ export default function Index() {
                     </Link>
                   </span>
                   <span>
-                    <Link
-                      to={`/EditPrescription/${value._id}`}
+                    <button
+                      onClick={() => {
+                        deletePrescription(value._id);
+                      }}
                       className="fa-link"
                     >
-                      <FontAwesomeIcon icon={faEdit} />
-                    </Link>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </span>
-                  <button
-                    onClick={() => {
-                      deletePrescription(value._id);
-                    }}
-                    className="fa-link"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
                 </div>
               </div>
             );
@@ -615,6 +679,21 @@ export default function Index() {
         data: { prescriptionId: id },
       })
       .then(alert("Prescription Successfully Deleted"))
+      .catch()
+      .finally(window.location.reload());
+  }
+  async function deleteReport(id, mriId) {
+    const response = await axios
+      .delete(`http://lumbarfy-server.herokuapp.com/report/delete`, {
+        data: { prescriptionId: id },
+      })
+      .then(
+        axios
+          .delete(`http://lumbarfy-server.herokuapp.com/mri/delete`, {
+            data: { mId: mriId },
+          })
+          .then(alert("Report Successfully Deleted"))
+      )
       .catch()
       .finally(window.location.reload());
   }

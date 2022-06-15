@@ -98,7 +98,7 @@ export default function DoctorForm() {
         console.log(selectedFile);
         console.log(patientId);
         axios
-          .post("http://lumbarfy-server.herokuapp.com/mri/add", {
+          .post("http://localhost:9000/mri/add", {
             image: selectedFile,
             patientId,
           })
@@ -116,7 +116,7 @@ export default function DoctorForm() {
                 var temp = response.data.description;
                 setDescription(temp);
                 axios
-                  .post("http://lumbarfy-server.herokuapp.com/report/add", {
+                  .post("http://localhost:9000/report/add", {
                     description,
                     patientId,
                     mriId: id,

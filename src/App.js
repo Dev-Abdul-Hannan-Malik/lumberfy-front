@@ -35,7 +35,7 @@ function App() {
 
         <Route exact path="/Doctor/DoctorForm" element={<DoctorForm />} />
         <Route exact path="/ViewDoctor/:id" element={<ViewDoctor />} />
-        <Route exact path="/EditDoctor/:id" element={<ViewDoctor />} />
+        <Route exact path="/EditDoctor/:id" element={<EditDoctor />} />
 
         <Route exact path="/PatientForm" element={<PatientForm />} />
         <Route exact path="/ViewPatient/:id" element={<ViewPatient />} />

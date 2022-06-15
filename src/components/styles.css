@@ -435,6 +435,11 @@ select {
   justify-content: center;
 }
 
+.book .view .profile {
+  width: 10%;
+  height: 10%;
+}
+
 .book .view h1 {
   text-align: center;
 }

@@ -57,7 +57,7 @@ export default function AppointmentForm() {
             back
           </Link>
           <h1 className="heading">
-            <span>appoin tment</span>
+            <span>appointment</span>
           </h1>
         </div>
         <div className="view">

@@ -23,6 +23,7 @@ export default function DoctorForm() {
         setNic(temp.doctor.nic);
         setEmail(temp.doctor.email);
         setPassword(temp.doctor.password);
+        setSelectedFile(temp.doctor.image);
         setTimeout(() => {
           console.log(temp);
         }, 100);
@@ -46,7 +47,7 @@ export default function DoctorForm() {
           </h1>
         </div>
         <div className="view">
-          <img src={selectedFile} alt="" />
+          <img className="profile" src={selectedFile} alt="" />
           <h3>
             <span>name: </span>
             {name}

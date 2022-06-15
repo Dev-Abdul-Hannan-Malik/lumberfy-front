@@ -74,7 +74,11 @@ export default function PrescriptionForm() {
             <strong>Description</strong>
           </h3>
           <br />
-          <p>{description}</p>
+          <p>
+            {description.split("\n").map((value) => {
+              return <p>{value}</p>;
+            })}
+          </p>
         </div>
       </section>
     </div>
