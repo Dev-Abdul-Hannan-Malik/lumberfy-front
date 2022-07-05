@@ -24,6 +24,7 @@ import ViewReport from "./components/ViewReport";
 import PrescriptionForm from "./components/PrescriptionForm";
 import EditPrescription from "./components/EditPrescription";
 import ViewPrescription from "./components/ViewPrescription";
+import Test from "./components/test";
 
 function App() {
   return (
@@ -66,6 +67,12 @@ function App() {
           exact
           path="/EditPrescription/:id"
           element={<EditPrescription />}
+        />
+
+<Route
+          exact
+          path="/test"
+          element={<Test />}
         />
       </Routes>
     </Router>

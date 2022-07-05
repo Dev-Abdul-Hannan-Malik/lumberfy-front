@@ -147,10 +147,8 @@ export default function Index() {
         <div className="content">
           <h3>Stay safe! Stay healthy!</h3>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
-            nostrum ut aperiam cumque. Officia, inventore, facere deserunt
-            tempora, earum accusantium optio pariatur laborum assumenda
-            perferendis sit quis. Nisi, quos fugiat.
+            LumbarFY is an automated diagnosis application, designed to help in
+            analyzing problems that occur in the Lumbar Spine.
           </p>
         </div>
       </section>
@@ -250,12 +248,27 @@ export default function Index() {
             <img src="images/about-img.svg" alt="" />
           </div>
           <div className="content">
-            <h3>we take care of your healthy life</h3>
+            <h3>Our Application is composed of:</h3>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam,
-              perferendis!
+              1. An AI Model that is hosted via a Flask Web Server and uses
+              TensorFlow and Keras for detection and extraction of information
+              from LumbarSpine
             </p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+            <p>
+              2. A MERN based back-end that is composed of an Express Server, a
+              MongoDB Database and a NODEJS framework, the logic building and
+              data handling of our application resides in this architecture
+            </p>
+            <p>
+              3. A ReactJS based front-end that allows interaction by User for
+              the application. The Application is completely built on CSS and
+              HTML for complete Developer Control.
+            </p>
+            <p>
+              4. A Flutter based Mobile Application for allowing portable access
+              to the application, this is more catered toward the common user
+              over an Administrator.
+            </p>
           </div>
         </div>
       </section>
@@ -568,20 +581,30 @@ export default function Index() {
         <div className="box-container">
           <div className="box">
             <h3>quick links</h3>
-            <button onClick={() => window.location.replace("/#home")}>
+            <button onClick={() => window.location.replace("/Index#home")}>
               home
             </button>
-            <button onClick={() => window.location.replace("/#services")}>
-              services
-            </button>
-            <button onClick={() => window.location.replace("/#about")}>
+            <button onClick={() => window.location.replace("/Index#about")}>
               about
             </button>
-            <button onClick={() => window.location.replace("/#doctors")}>
+            <button onClick={() => window.location.replace("/Index#doctors")}>
               doctors
             </button>
-            <button onClick={() => window.location.replace("/#patients")}>
+            <button onClick={() => window.location.replace("/Index#patients")}>
               patients
+            </button>
+            <button
+              onClick={() => window.location.replace("/Index#appointments")}
+            >
+              appointments
+            </button>
+            <button onClick={() => window.location.replace("/Index#reports")}>
+              reports
+            </button>
+            <button
+              onClick={() => window.location.replace("/Index#prescriptions")}
+            >
+              prescriptions
             </button>
           </div>
 
